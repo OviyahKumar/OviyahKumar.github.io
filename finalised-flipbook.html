@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Real Flipbook</title>
+  <style>
+    html, body {
+      margin: 0; padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: 'Roboto', sans-serif;
+      background: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    #page3 {
+      background-image: url("3rd-pg.png");
+      background-size: cover;
+      background-position: center;
+      width: 100%;
+      height: 100%;
+      padding-top: 2vh;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .page3-title {
+      font-size: 4vw;
+      color: rgb(0, 0, 0);
+      text-shadow: 2px 2px 5px rgb(255, 255, 255);
+      margin: 0 0 1.5vh 0;
+      padding-top: 1vh;
+      flex-shrink: 0;
+    }
+
+    .page3-subtitle {
+      font-size: 3vw;
+      color: rgb(0, 0, 0);
+      text-shadow: 2px 2px 5px rgb(255, 255, 255);
+      margin: 0 0 2vh 0;
+      flex-shrink: 0;
+    }
+
+    input {
+      display: none;
+    }
+
+    .book {
+      width: 80%;
+      height: 70%;
+      position: relative;
+      perspective: 2000px;
+      box-sizing: border-box;
+      flex-shrink: 0;
+      margin-bottom: 1.5vh;
+    }
+
+    .flip {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      transform-origin: left;
+      transform-style: preserve-3d;
+      transform: rotateY(0deg);
+      transition: 0.8s ease-in-out;
+    }
+
+    .page {
+      width: 50%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      overflow: hidden;
+      backface-visibility: hidden;
+    }
+
+    .left {
+      left: 0;
+      z-index: 2;
+    }
+
+    .right {
+      right: 0;
+      transform: rotateY(0deg);
+      transform-origin: left;
+      z-index: 1;
+    }
+
+    .right img {
+      transform: scaleX(-1);
+    }
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    #p1 { z-index: 4; }
+    #p2 { z-index: 3; }
+    #p3 { z-index: 2; }
+    #p4 { z-index: 1; }
+
+    #c1:checked ~ .book #p1 {
+      transform: rotateY(-180deg);
+    }
+
+    #c2:checked ~ .book #p2 {
+      transform: rotateY(-180deg);
+    }
+
+    #c3:checked ~ .book #p3 {
+      transform: rotateY(-180deg);
+    }
+
+    .page3-buttons {
+      margin-top: 4vh;
+      display: flex;
+      justify-content: center;
+      gap: 1vw;
+      width: auto;
+      flex-shrink: 0;
+    }
+
+    .page3-buttons button {
+      padding: 1vh 1.2vw;
+      font-size: 1.4vw;
+      background-color: #f58210;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      color: rgb(0, 0, 0);
+      transition: 0.3s ease;
+      min-width: 80px;
+      margin-bottom: 40px
+    }
+
+    .page3-buttons button:hover {
+      background-color: #15fb21;
+      color: black;
+    }
+
+    #quizButton {
+      position: absolute;
+      top: 50%;
+      right: 200px;
+      transform: translateY(-50%);
+      width: 180px;
+      height: 50px;
+      text-align: center;
+      line-height: 50px;
+      padding: 0;
+      font-size: 1.8vw;
+      background-color: #f58210;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      color: rgb(0, 0, 0);
+      transition: 0.3s ease;
+      z-index: 10;
+      display: none; /* hide initially */
+    }
+
+    #quizButton:hover {
+      background-color: #15fb21;
+      color: black;
+    }
+
+    .fade-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: black;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 9999;
+      transition: opacity 1s ease;
+    }
+
+    .fade-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="page3" class="page">
+    <h2 class="page3-title">You have found Coco's diary!</h2>
+    <p class="page3-subtitle">Task 2: Flip through to learn the truth.</p>
+
+    <!-- Hidden Checkboxes -->
+    <input type="checkbox" id="c1" />
+    <input type="checkbox" id="c2" />
+    <input type="checkbox" id="c3" />
+
+    <div class="book">
+      <div class="flip" id="p1">
+        <div class="page left">
+          <img src="book-pg-1.png" alt="Page 1" />
+        </div>
+        <div class="page right">
+          <img src="latest.jpg" alt="Page 2" />
+        </div>
+      </div>
+
+      <div class="flip" id="p2">
+        <div class="page left">
+          <img src="book-pg-3.png" alt="Page 3" />
+        </div>
+        <div class="page right">
+          <img src="book-pg-4.jpg" alt="Page 4" />
+        </div>
+      </div>
+
+      <div class="flip" id="p3">
+        <div class="page left">
+          <img src="book-pg-5.png" alt="Page 5" />
+        </div>
+        <div class="page right">
+          <img src="book-pg-6.jpg" alt="Page 6" />
+        </div>
+      </div>
+
+      <div class="flip" id="p4">
+        <div class="page left">
+          <img src="book-pg-7.png" alt="Page 7" />
+        </div>
+        <div class="page right"></div>
+      </div>
+    </div>
+
+    <div class="page3-buttons">
+      <button onclick="prevPage()">Previous</button>
+      <button onclick="nextPage()">Next</button>
+    </div>
+
+    <button id="quizButton">Ready to do quiz?</button>
+  </div>
+
+  <!-- Fade overlay -->
+  <div id="fadeOverlay" class="fade-overlay"></div>
+
+  <script>
+    let currentPage = 0;
+    const checkboxes = [
+      document.getElementById("c1"),
+      document.getElementById("c2"),
+      document.getElementById("c3")
+    ];
+
+    const quizButton = document.getElementById("quizButton");
+    quizButton.style.display = "none"; // Hide quiz button initially
+
+    // Load flip sound
+    const flipSound = new Audio("pageflip.mp3");
+
+    function updateFlip() {
+      checkboxes.forEach((cb, i) => {
+        cb.checked = i < currentPage;
+      });
+
+      // Show quiz button only on last page
+      if (currentPage === checkboxes.length) {
+        quizButton.style.display = "block";
+      } else {
+        quizButton.style.display = "none";
+      }
+    }
+
+    function nextPage() {
+      if (currentPage < checkboxes.length) {
+        currentPage++;
+        updateFlip();
+        flipSound.currentTime = 0;
+        flipSound.play();
+      }
+    }
+
+    function prevPage() {
+      if (currentPage > 0) {
+        currentPage--;
+        updateFlip();
+        flipSound.currentTime = 0;
+        flipSound.play();
+      }
+    }
+
+    document.getElementById("quizButton").addEventListener("click", () => {
+      const overlay = document.getElementById("fadeOverlay");
+      overlay.classList.add("active");
+
+      setTimeout(() => {
+        window.location.href = "final-quiz-file.html";
+      }, 1000);
+    });
+  </script>
+</body>
+</html>
